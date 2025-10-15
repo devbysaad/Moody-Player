@@ -1,67 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as faceapi from "face-api.js";
+// 📄 src/components/FacialExpression.jsx
+import React from "react";
+import { useFaceApi } from "../context/useFaceApi";
 
 const FacialExpression = () => {
-  const videoRef = useRef();
-  const [isDetecting, setIsDetecting] = useState(false);
-  const [mood, setMood] = useState("Not Started");
-
-  // Load models once and start camera
-  useEffect(() => {
-    const loadModels = async () => {
-      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
-      await faceapi.nets.faceExpressionNet.loadFromUri("/models");
-      startVideo();
-    };
-
-    const startVideo = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        videoRef.current.srcObject = stream;
-        videoRef.current.onloadedmetadata = () => videoRef.current.play();
-      } catch (err) {
-        console.error("Camera not accessible:", err);
-      }
-    };
-
-    loadModels();
-  }, []);
-
-  // One-time detection
-  const detectOnce = async () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceExpressions();
-
-    if (detections && detections.length > 0) {
-      const expressions = detections[0].expressions;
-      let highest = 0;
-      let expressionName = "";
-
-      for (const [name, value] of Object.entries(expressions)) {
-        if (value > highest) {
-          highest = value;
-          expressionName = name;
-        }
-      }
-
-      setMood(expressionName);
-    } else {
-      setMood("No Face Detected");
-    }
-
-    setIsDetecting(false);
-  };
-
-  const handleStartListening = async () => {
-    if (isDetecting) return;
-    setIsDetecting(true);
-    setMood("Detecting...");
-    await detectOnce();
-  };
+  const { videoRef, mood, isDetecting, handleStartListening } = useFaceApi();
 
   return (
     <div className="bg-gray-900 rounded-t-xl text-white min-h-[50%] flex flex-col items-center justify-center p-6">
