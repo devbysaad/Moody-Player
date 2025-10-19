@@ -1,20 +1,78 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 
 const MoodSongs = ({ songs }) => {
+  const [currentPlaying, setCurrentPlaying] = useState(null);
+  const audioRefs = useRef([]);
+
+  const handlePlay = (index) => {
+    // Pause all other audios before playing the selected one
+    audioRefs.current.forEach((audio, i) => {
+      if (audio && i !== index) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    // Play selected song
+    const selectedAudio = audioRefs.current[index];
+    if (selectedAudio) {
+      if (currentPlaying === index) {
+        selectedAudio.pause();
+        setCurrentPlaying(null);
+      } else {
+        selectedAudio.play();
+        setCurrentPlaying(index);
+      }
+    }
+  };
+
   return (
     <div className="mt-8 bg-gray-900 rounded-xl p-6 shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">🎧 Songs for Your Mood</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">🎧 Songs for Your Mood</h2>
+
       {songs.length === 0 ? (
         <p className="text-gray-400">No songs found for this mood.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-3">
           {songs.map((song, index) => (
             <li
               key={index}
-              className="p-3 bg-gray-800 rounded-lg flex justify-between items-center"
+              className="p-4 bg-gray-800 rounded-lg flex justify-between items-center hover:bg-gray-700 transition"
             >
-              <span className="font-medium">{song.title}</span>
-              <span className="text-gray-400 text-sm">by {song.artist}</span>
+              {/* Song Info */}
+              <div className="flex flex-col">
+                <span className="font-medium text-white">{song.title}</span>
+                <span className="text-sm text-gray-400">{song.artist}</span>
+              </div>
+
+              {/* Audio Player */}
+              <div
+                className="p-2 rounded-lg shadow-inner"
+                style={{
+                  
+                  width: "250px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <audio
+                  ref={(el) => (audioRefs.current[index] = el)}
+                  src={song.audio}
+                  className="hidden"
+                  onEnded={() => setCurrentPlaying(null)}
+                />
+                <button
+                  onClick={() => handlePlay(index)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    currentPlaying === index
+                      ? "bg-red-600 hover:bg-red-700"
+                      : "bg-purple-600 hover:bg-purple-700"
+                  }`}
+                >
+                  {currentPlaying === index ? "Pause" : "Play"}
+                </button>
+              </div>
             </li>
           ))}
         </ul>
