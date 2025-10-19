@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-const MoodSongs = ({ songs }) => {
+const MoodSongs = ({ songs = [] }) => {
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const audioRefs = useRef([]);
 
@@ -20,7 +20,7 @@ const MoodSongs = ({ songs }) => {
         selectedAudio.pause();
         setCurrentPlaying(null);
       } else {
-        selectedAudio.play();
+        selectedAudio.play().catch((err) => console.error("Audio play error:", err));
         setCurrentPlaying(index);
       }
     }
@@ -30,7 +30,7 @@ const MoodSongs = ({ songs }) => {
     <div className="mt-8 bg-gray-900 rounded-xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4 text-white">🎧 Songs for Your Mood</h2>
 
-      {songs.length === 0 ? (
+      {!songs || songs.length === 0 ? (
         <p className="text-gray-400">No songs found for this mood.</p>
       ) : (
         <ul className="space-y-3">
@@ -41,15 +41,14 @@ const MoodSongs = ({ songs }) => {
             >
               {/* Song Info */}
               <div className="flex flex-col">
-                <span className="font-medium text-white">{song.title}</span>
-                <span className="text-sm text-gray-400">{song.artist}</span>
+                <span className="font-medium text-white">{song.title || "Untitled"}</span>
+                <span className="text-sm text-gray-400">{song.artist || "Unknown Artist"}</span>
               </div>
 
               {/* Audio Player */}
               <div
                 className="p-2 rounded-lg shadow-inner"
                 style={{
-                  
                   width: "250px",
                   display: "flex",
                   alignItems: "center",
@@ -59,7 +58,6 @@ const MoodSongs = ({ songs }) => {
                 <audio
                   ref={(el) => (audioRefs.current[index] = el)}
                   src={song.audio}
-                  className="hidden"
                   onEnded={() => setCurrentPlaying(null)}
                 />
                 <button
