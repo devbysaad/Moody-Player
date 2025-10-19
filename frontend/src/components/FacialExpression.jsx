@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import axios from "axios";
 
-const FacialExpression = ({setSongs}) => {
+const FacialExpression = ({ setSongs }) => {
   const videoRef = useRef(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const [mood, setMood] = useState("Not Started");
@@ -57,16 +57,19 @@ const FacialExpression = ({setSongs}) => {
 
       setMood(expressionName);
 
-      
-      axios.get(`http://localhost:3000/songs?mood=${expressionName}`)
-      .then(response=>{
-        console.log(response.data);
-        setSongs(response.data.songs)
-      })
-     
-       
+      // ✅ Use the environment variable instead of hardcoding localhost
+      const BASE_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+
+      axios
+        .get(`${BASE_URL}/songs?mood=${expressionName}`)
+        .then((response) => {
+          setSongs(response.data.songs);
+        })
+        .catch((err) => {
+          console.error("Error fetching songs:", err);
+        });
+
     } else {
-      
       setMood("No Face Detected");
     }
 
@@ -104,10 +107,11 @@ const FacialExpression = ({setSongs}) => {
           <button
             onClick={handleStartListening}
             disabled={isDetecting}
-            className={`px-5 py-2 rounded-lg font-medium transition ${isDetecting
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-purple-600 hover:bg-purple-700"
-              }`}
+            className={`px-5 py-2 rounded-lg font-medium transition ${
+              isDetecting
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-purple-600 hover:bg-purple-700"
+            }`}
           >
             {isDetecting ? "Detecting..." : "Start Listening"}
           </button>
