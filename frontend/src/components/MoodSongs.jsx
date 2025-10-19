@@ -1,33 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 
-const MoodSongs = () => {
-  const [songs] = useState([
-    { title: "Sunrise Serenade", artist: "Ava Carter" },
-    { title: "Midnight Groove", artist: "Ethan Blake" },
-  ]);
-
+const MoodSongs = ({ songs }) => {
   return (
-    <div className="bg-gray-900 rounded-b-xl text-white  flex flex-col items-center p-6">
-      <div className="w-full max-w-4xl">
-        <h2 className="text-2xl font-bold mb-4 text-purple-400">Recommended Tracks</h2>
-
-        <div className="space-y-4">
+    <div className="mt-8 bg-gray-900 rounded-xl p-6 shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">🎧 Songs for Your Mood</h2>
+      {songs.length === 0 ? (
+        <p className="text-gray-400">No songs found for this mood.</p>
+      ) : (
+        <ul className="space-y-2">
           {songs.map((song, index) => (
-            <div
+            <li
               key={index}
-              className="flex items-center justify-between bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition"
+              className="p-3 bg-gray-800 rounded-lg flex justify-between items-center"
             >
-              <div>
-                <div className="text-lg font-semibold">{song.title}</div>
-                <div className="text-gray-400 text-sm">{song.artist}</div>
-              </div>
-              <button className="text-purple-400 hover:text-purple-300 text-xl">
-                ▶
-              </button>
-            </div>
+              <span className="font-medium">{song.title}</span>
+              <span className="text-gray-400 text-sm">by {song.artist}</span>
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      )}
     </div>
   );
 };

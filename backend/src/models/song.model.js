@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const songSchema = new mongoose.Schema({
   title: String,
   artist: String,
-  audio: String, // fixed field name to match route
+  audio: String, // ✅ change from url → audio
   mood: String,
 });
 

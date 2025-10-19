@@ -4,9 +4,7 @@ const uploadFile = require('../services/storege.service');
 const songModel = require('../models/song.model');
 const router = express.Router();
 
-const uploadSongs = multer({
-  storage: multer.memoryStorage()
-});
+const uploadSongs = multer({ storage: multer.memoryStorage() });
 
 router.post('/songs', uploadSongs.single('audio'), async (req, res) => {
   console.log(req.body);
@@ -20,13 +18,23 @@ router.post('/songs', uploadSongs.single('audio'), async (req, res) => {
   const song = await songModel.create({
     title: req.body.title,
     artist: req.body.artist,
-    audio: fileData.url, // fixed: use fileData.url instead of full object
+    audio: fileData.url,
     mood: req.body.mood
   });
 
   res.status(201).json({
     message: 'Song Added',
     song
+  });
+});
+
+router.get('/songs', async (req, res) => {
+  const { mood } = req.query;
+  const songs = await songModel.find({ mood: mood });
+
+  res.status(200).json({
+    message: 'Songs fetched successfully',
+    songs: songs
   });
 });
 

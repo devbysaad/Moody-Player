@@ -1,6 +1,7 @@
 // 📄 src/hooks/useFaceApi.jsx
 import { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import axios from 'axios';
 
 export const useFaceApi = () => {
   const videoRef = useRef(null);
@@ -54,7 +55,11 @@ export const useFaceApi = () => {
           expressionName = name;
         }
       }
-
+      axios.get(`http://localhost:3000/songs?mood=%${expressionName}`).then(res=>{
+        console.log(res.data);
+        
+      })
+    
       setMood(expressionName);
     } else {
       setMood("No Face Detected");

@@ -1,6 +1,6 @@
 const app = require('./src/app');
 const connectDB = require('./src/database/db');
-require('dotenv').config({ path: './.env' }); // fixed path
+require('dotenv').config({ path: './.env' });
 
 connectDB();
 app.listen(3000, () => {

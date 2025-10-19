@@ -29,8 +29,8 @@ const FacialExpression = () => {
             onClick={handleStartListening}
             disabled={isDetecting}
             className={`px-5 py-2 rounded-lg font-medium transition ${isDetecting
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-purple-600 hover:bg-purple-700"
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
               }`}
           >
             {isDetecting ? "Detecting..." : "Start Listening"}
