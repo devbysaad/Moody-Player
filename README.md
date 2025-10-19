@@ -3,7 +3,8 @@
 > An AI-powered music player that detects your facial expression and plays songs that match your mood — built with **React**, **Face API**, **Node.js**, **Express**, and **MongoDB**.
 
 ---
-
+---
+**Project Link** https://moody-player-frontend-gules.vercel.app/
 ## 🧠 Project Overview
 
 **Moody Player** uses your webcam to detect facial expressions like *happy*, *sad*, *neutral*, etc., using **Face API.js**, then fetches mood-specific songs from a MongoDB database through an Express backend.
