@@ -4,7 +4,7 @@
 
 ---
 ---
-**Project Link** https://moody-player-frontend-gules.vercel.app/
+**Project Link** https://moody-player-xi6t.vercel.app/
 ## 🧠 Project Overview
 
 **Moody Player** uses your webcam to detect facial expressions like *happy*, *sad*, *neutral*, etc., using **Face API.js**, then fetches mood-specific songs from a MongoDB database through an Express backend.
