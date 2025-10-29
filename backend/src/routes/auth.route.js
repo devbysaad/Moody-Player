@@ -3,6 +3,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const router = express.Router();
 
+// Health check for auth routes
+router.get("/health", (req, res) => {
+  res.json({ status: "ok", route: "auth" });
+});
+
 // JWT Secret (should be in .env)
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
@@ -84,78 +89,47 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
   try {
-    const { identifier, password } = req.body;
-    
-    // Validation
-    if (!identifier || !password) {
-      return res.status(400).json({ 
-        message: "Identifier and password are required",
-        status: "error" 
-      });
+    const { name, password } = req.body;
+
+    // 🔍 Check inputs
+    if (!name || !password) {
+      return res.status(400).json({ message: "Name and password are required", status: "error" });
     }
 
-    // Find user by email or username
-    const user = await User.findOne({
-      $or: [
-        { name: identifier },
-        { email: identifier.toLowerCase() }
-      ]
-    });
-    
+    // 🔍 Find user by name
+    const user = await User.findOne({ name });
+
     if (!user) {
-      return res.status(404).json({ 
-        message: "User not found",
-        status: "error" 
-      });
+      return res.status(404).json({ message: "User not found", status: "error" });
     }
 
-    // Check password
+    // 🔍 Check password
     if (user.password !== password) {
-      return res.status(401).json({ 
-        message: "Invalid password",
-        status: "error" 
-      });
+      return res.status(401).json({ message: "Invalid password", status: "error" });
     }
 
-    // Generate JWT token
+    // ✅ Generate token
     const token = jwt.sign(
-      { 
-        userId: user._id, 
-        name: user.name, 
-        email: user.email 
-      },
-      JWT_SECRET,
+      { userId: user._id, name: user.name },
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // Set cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-
-    res.json({ 
-      message: "Login successful", 
-      user: { 
-        id: user._id, 
+    res.status(200).json({
+      message: "Login successful",
+      status: "success",
+      token,
+      user: {
+        userId: user._id,
         name: user.name,
         email: user.email,
-        createdAt: user.createdAt 
       },
-      status: "success"
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ 
-      message: "Server error", 
-      error: error.message,
-      status: "error"
-    });
+    res.status(500).json({ message: "Server error", status: "error" });
   }
 });
-
 // Get user profile (protected route)
 router.get("/profile", verifyToken, async (req, res) => {
   try {
