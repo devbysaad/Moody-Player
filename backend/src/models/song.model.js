@@ -1,9 +1,10 @@
+// src/models/song.model.js
 const mongoose = require("mongoose");
 
 const songSchema = new mongoose.Schema({
   title: String,
   artist: String,
-  audio: String, // ✅ change from url → audio
+  audio: String,
   mood: String,
 });
 
