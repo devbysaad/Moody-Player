@@ -4,7 +4,7 @@
 
 **An AI-powered music player that reads your face and plays songs that match your mood.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-6366f1?style=for-the-badge&logo=vercel)](https://moody-player-xi6t.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-6366f1?style=for-the-badge&logo=vercel)](https://moodytyunes.vercel.app/)
 ![React](https://img.shields.io/badge/React-Vite-61DAFB?style=flat-square&logo=react)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat-square&logo=mongodb)
@@ -112,7 +112,7 @@ App runs at `http://localhost:5173`
 
 ## 🌐 Live Demo
 
-👉 [moody-player-xi6t.vercel.app](https://moody-player-xi6t.vercel.app/)
+👉 [moody-player-xi6t.vercel.app](https://moodytyunes.vercel.app/)
 
 ---
 
